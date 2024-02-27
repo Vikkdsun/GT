@@ -1,4 +1,4 @@
-![image](https://github.com/Vikkdsun/GT/assets/114153159/80b37297-6b16-486f-af09-b261cc4960c6)# GT
+# GT
  A project of GT.
 # GT收发器
 ---

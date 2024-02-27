@@ -1,4 +1,4 @@
-![image](https://github.com/Vikkdsun/GT/assets/114153159/4cc653af-296f-4501-a273-b77f1b3e30c4)# GT_IP
+# GT_IP
 
 该链接可供参考：
 

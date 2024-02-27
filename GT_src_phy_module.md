@@ -1,4 +1,4 @@
-# 讲解代码Phy_module及其子模块
+![image](https://github.com/Vikkdsun/GT/assets/114153159/04b0ead0-98c7-4c59-b6a9-a65ba6c0b100)# 讲解代码Phy_module及其子模块
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/7366e29d-6a9a-4574-b7a1-3eb5ac1fe551)
 
@@ -146,6 +146,54 @@ GT发送时要做到小端发送：
 
 
 最后，关于ready的控制，***tx_done未拉高，他就不能拉高，所以需要与操作***。
+
+
+
+
+## Phy_rx
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/10738c53-3152-4130-9162-66ec9622a861)
+
+Phy_rx的端口和tx正好相反，他是把GT端口数据转成AXI_STREAM
+
+这里需要注意的是，GT只能做字节对齐，但是不会做32bit对齐，也就是比如发送端发送的是第一个32bit是BC 50 BC 50，但是接收时第一个有关的32bit可能是X X BC 50
+
+所以这里要分很多复杂的情况来讨论：
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/5790af43-bae1-4031-b68f-8b1e490dd8d8)
+
+首先找BC 50 FB，为什么不找BC 50 BC 50 FB呢，因为同步码可能会被丢掉，由于***弹性Buffer的上溢***，所以我们只找BC 50 FB，同时我们主要是找FB的位置，图中可以看到，data为当前时刻的数据，data_1d为打一拍的数据（上一时刻的数据），found_fb是一个脉冲，表示我们找到了FB（寻找FB需要找BC 50 FB，再次强调，这也是为什么我们要做一个打一拍），local为FB在***当前数据***的位置，但是我们会发现，第一个情况下，Tb+1时，有D（FB后的数据）的是data而不是data_1d
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/42e4d7e7-96b7-4f0a-a45b-a4b83ea38337)
+
+图中展示的是输出数据怎么控制，根据local的不同控制方式也不同
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/2a6c9f60-9e96-4a51-b3e9-3557da3f368c)
+
+然后找FD，可以看到，FD似乎更简单，但是FD的四种情况在FB的四种情况下，会变得复杂，我们讨论一下
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/9ed28b16-2726-46cc-81dd-ceb1626e865d)
+
+比如如图所示，我们让FB端任意local，然后选择FD的第四种情况，就会有found_FD和最后一个数据同时拉高（我们认为FD拉高是一次数据处理结束的标准，也就是LAST）
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/fa904009-1f58-46ab-ae91-a205628f120b)
+
+但是，我们选择FB第四种情况，FD的第一种情况，就会有图中的问题，也就是foud_FD和最后一个数据不是同时拉高，这就会丢掉后面的数据，这时我们检测foud_FD就得用data_1d而不是data
+
+所以我们要找出所有情况下，应该用data还是data1d来处理FD
+
+#### 什么时候用data？
+
+>FB对应的采集数据data_1d的Byte数量和FD对应的FD之前的数量的和要小于等于4，这什么意思呢，比如FB的第一种情况，采集的data_1d字节量为0，而FD的任意一个情况FD之前字节数都不到4，最多就3，所以控制FD用data
+
+>FB的第二种情况，data_1d采集1个数据，而FD最多3个，所以该情况下控制FD也用data
+
+>FB的第三种情况，data_1d采集2个数据，FD第一种情况有3个数据，所以这时我们需要用data_1d
+
+>FB的第四种情况，data_1d采集3个数据，FD的第一种情况有3个数据，第二种情况有2个，所以对于这两种情况，我们需要用data_1d
+
+有了以上分析，控制输出AXI_STREAM也很容易了
+
 
 
 

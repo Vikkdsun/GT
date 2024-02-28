@@ -1,4 +1,4 @@
-![image](https://github.com/Vikkdsun/GT/assets/114153159/04b0ead0-98c7-4c59-b6a9-a65ba6c0b100)# 讲解代码Phy_module及其子模块
+# 讲解代码Phy_module及其子模块
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/7366e29d-6a9a-4574-b7a1-3eb5ac1fe551)
 

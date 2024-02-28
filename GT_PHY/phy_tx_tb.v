@@ -45,20 +45,20 @@ begin
     i_axi_s_last  <= 'd0;
     @(posedge clk);
     i_axi_s_valid <= 'd1;
-    i_axi_s_keep  <= 'b1100;
+    i_axi_s_keep  <= 'b1111;
     i_axi_s_data  <= 'h87654321;
-    i_axi_s_last  <= 'd1;
+    i_axi_s_last  <= 'd0;
     @(posedge clk);
-//     i_axi_s_valid <= 'd1;
-//     i_axi_s_keep  <= 'b1111;
-//     i_axi_s_data  <= 'h98765432;    
-//     i_axi_s_last  <= 'd0;
-//     @(posedge clk);
-//     i_axi_s_valid <= 'd1;
-//     i_axi_s_keep  <= 'b1100;
-//     i_axi_s_data  <= 'h12345678;
-//     i_axi_s_last  <= 'd1;
-//     @(posedge clk);
+     i_axi_s_valid <= 'd1;
+     i_axi_s_keep  <= 'b1000;
+     i_axi_s_data  <= 'h98765432;    
+     i_axi_s_last  <= 'd1;
+     @(posedge clk);
+    // i_axi_s_valid <= 'd1;
+    // i_axi_s_keep  <= 'b1100;
+    // i_axi_s_data  <= 'h12345678;
+    // i_axi_s_last  <= 'd1;
+    // @(posedge clk);
     i_axi_s_valid <= 'd0;
     i_axi_s_keep  <= 'd0;
     i_axi_s_data  <= 'd0;
@@ -67,7 +67,7 @@ begin
 end
 
 
- phy_tx phy_tx_u(
+ phy_tx_complexState phy_tx_u(
      .i_clk           (clk),
      .i_rst           (rst),
      /* ---- UserAxiPort ---- */

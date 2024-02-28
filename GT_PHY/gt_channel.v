@@ -81,7 +81,7 @@ gt_trans_GT_USRCLK_SOURCE gt_trans_GT_USRCLK_SOURCE_u
     .GT0_TXUSRCLK2_OUT              (w_gt0_txusrclk2        ),
 
     .GT0_TXOUTCLK_IN                (w_gt0_txoutclk         ),
-    .GT0_TXCLK_LOCK_OUT             (rx_mmcm_lock_in        ),
+    .GT0_TXCLK_LOCK_OUT             (tx_mmcm_lock_in        ),
     .GT0_TX_MMCM_RESET_IN           (tx_mmcm_reset_out      ),
 
     .GT0_RXUSRCLK_OUT               (w_gt0_rxusrclk         ),

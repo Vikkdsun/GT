@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module gt_moudle(
+module gt_module(
     input                   i_sys_clk           ,
     input                   i_bank_refclk_n     ,
     input                   i_bank_refclk_p     ,
@@ -101,9 +101,9 @@ gt_trans_common_u
     .QPLLREFCLKSEL_IN                   (3'b001             ),
     .GTREFCLK0_IN                       (w_gtrefclk         ),
     .GTREFCLK1_IN                       (0),
-    .QPLLLOCK_OUT                       (i_sys_clk          ),
+    .QPLLLOCK_OUT                       (w_qplllock         ),
 
-    .QPLLLOCKDETCLK_IN                  (w_qplllock         ),
+    .QPLLLOCKDETCLK_IN                  (i_sys_clk          ),
     .QPLLOUTCLK_OUT                     (w_qplloutclk       ),
     .QPLLOUTREFCLK_OUT                  (w_qplloutrefclk    ),
     .QPLLREFCLKLOST_OUT                 (w_qpllrefclklost   ),   

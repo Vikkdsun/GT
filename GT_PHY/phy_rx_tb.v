@@ -339,7 +339,7 @@ begin
     
 end
 
-phy_rx phy_rx(
+phy_rx_2 phy_rx(
     .i_clk           (clk),
     .i_rst           (rst),
     /* ---- UserAxiPort ---- */

@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module phy_tx_complexState(
+module phy_tx(
     input                   i_clk           ,
     input                   i_rst           ,
     /* ---- UserAxiPort ---- */
@@ -62,7 +62,7 @@ begin
     if (i_rst)
         r_len <= 'd0;
     else if (w_valid_pos)
-        r_len <= 'd0;
+        r_len <= 'd1;
     else if (i_axi_s_valid)
         r_len <= r_len + 1;
     else
@@ -169,7 +169,7 @@ begin
         P_ST_DATA1  : r_st_next = !i_axi_s_valid && r_st_cnt == r_len - 2 && ri_axi_s_keep == 4'b1111    ?   P_ST_FD1    :
                                   !i_axi_s_valid && r_st_cnt == r_len - 2 && ri_axi_s_keep == 4'b1110    ?   P_ST_FD2    :
                                   !i_axi_s_valid && r_st_cnt == r_len - 3 && ri_axi_s_keep == 4'b1100    ?   P_ST_FD3    :
-                                  !i_axi_s_valid && r_st_cnt == r_len - 3 && ri_axi_s_keep == 4'b1000    ?   P_ST_FD3    :
+                                  !i_axi_s_valid && r_st_cnt == r_len - 3 && ri_axi_s_keep == 4'b1000    ?   P_ST_FD4    :
                                   P_ST_DATA1    ;
         P_ST_DATA2  : r_st_next = ri_axi_s_keep == 4'b1111      ?   P_ST_FD1    :
                                   ri_axi_s_keep == 4'b1110      ?   P_ST_FD2    :
@@ -229,7 +229,7 @@ begin
         r_ready <= 'd1;
     else if (i_axi_s_last)
         r_ready <= 'd0;
-    else if ((r_st_current == P_ST_FD1 || r_st_current == P_ST_FD2 || r_st_current == P_ST_FD3 || r_st_current == P_ST_FD4) && r_st_next == P_ST_IDLE)
+    else if (r_st_current == P_ST_IDLE && r_st_next == P_ST_IDLE)
         r_ready <= 'd1;
     else
         r_ready <= r_ready;

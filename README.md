@@ -1,5 +1,8 @@
 # GT
  A project of GT.
+ 
+ ![image](https://github.com/Vikkdsun/GT/assets/114153159/428dac69-37c0-48cd-8ea5-ab8e61f222bd)
+
 # GT收发器
 ---
 ## 简介

@@ -56,6 +56,21 @@ RXUSRCLK：用户时钟
 
 RXUSRCLK2：写代码时 always就用这个时钟驱动
 
+2Byte/4Byte mode:
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/88f0cb6a-b5b9-4a09-ab64-be86f97f9d11)
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/410f2f22-bb97-4284-aaa4-2a19b0940cd9)
+
+4Byte/8Byte mode:
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/bdc636d2-181e-4e99-9b00-f6723bee69a3)
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/5f2e6faf-030e-41a6-87a9-2f5c744d3074)
+
+
+***尽管TXUSRCLK、TXUSRCLK2和发射机参考时钟可能以不同的频率运行，但它们的源必须是一个振荡器。因此，TXUSRCLK和TXUSRCLK 2必须是发射机参考时钟的倍频或分频版本。***
+
 GT Bank有两对参考时钟（差分），但是我们只能用其一。这个时钟进来后，首先经过IBUFDS_GTE2（差分转单端、单端转差分），之后两条路，一个交给QPLL，另一个交给各自的通道，交给通道的CPLL。
 
 图中可以看到，QPLL和CPLL是可以选择使用哪个的，那么选择哪个？

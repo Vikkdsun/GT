@@ -76,7 +76,9 @@ CPLL也是同理 有多种时钟选择
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/3cc87dbc-a756-4a52-bd39-5944cab20bcc)
 
-***一个参考时钟最多驱动四个channel，多了可能抖动。***
+***一个参考时钟最多驱动四个channel，多了可能抖动。但是看手册好像说是最多12个***
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/6698e47e-76c2-4130-beee-b62db6e5c1ba)
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/3e0727fd-f503-4dc5-821a-ee3843eb1148)
 

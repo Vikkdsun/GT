@@ -75,7 +75,7 @@ GT Bank有两对参考时钟（差分），但是我们只能用其一。这个�
 
 图中可以看到，QPLL和CPLL是可以选择使用哪个的，那么选择哪个？
 
-***CPLL在限速率低（<6Gps）首选，高限速率（10Gbps）用QPLL。***
+***CPLL在限速率低（<6.6Gps）首选，高限速率（10Gbps）用QPLL。***
 
 在架构上，Quad（或Q）的概念包含一组四个GTXE2_CHANNEL/GTHE2_CHANNEL原语、一个GTXE2_COMMON/ GTHE2_COMMON原语、两个专用外部参考时钟引脚对和专用参考时钟路由。必须为每个收发器实例化GTXE2_CHANNEL/GTHE2_CHANNEL原语。如果需要高性能QPLL，则还必须实例化GTXE2_COMMON/GTHE2_COMMON原语。当仅使用CPLL时，即使不使用QPLL，也必须实例化GTXE2_COMMON/GTHE2_COMMON原语，这由7系列FPGA收发器向导自动处理。
 

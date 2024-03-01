@@ -28,7 +28,9 @@ Line Rate：设置线速率，在这里我们设置为10
 
 TX off（TX off）：关闭发送/接收通道，这里不关闭
 
-Reference Clock：参考时钟，在原理图上挑选GT Bank上的时钟，在7100这张卡上我们设置200Mhz时钟
+Reference Clock：参考时钟，在原理图上挑选GT Bank上的时钟，在7100这张卡上连接SFP的GT的Bank的时钟是125Mhz我们选择125Mhz
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/5acc9f7a-59da-49bd-9300-b701319d2e79)
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/aba617fc-b5a2-4f91-a13b-9efeb0211522)
 

@@ -237,7 +237,7 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/e9d289e8-ed20-4318-a008-eba6f8945e11)
 
-#### 上图才是正常时序，也就是i_tx_reset一直为0（不复位）产生一个QPLL的reset(图中有两个reset 上面_i是ip输出的 下面的_t是做了或操作 送到COMMON的真正reset)，过了这个reset后，QPLL先lock，然后才有outclk然后userclk2，最后初始化成功
+#### 上图才是正常时序，也就是i_tx_reset一直为0（不复位），✨***由于QPLL的reset和GT的tx_reset我们写的时候绑定了关系***✨，所以当i_tx_reset为0，产生一个QPLL的reset(图中有两个reset 上面_i是ip输出的 下面的_t是做了或操作 送到COMMON的真正reset)，过了这个reset后，QPLL先lock，然后才有outclk然后userclk2，最后初始化成功
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/0125115e-92a8-4e22-8529-c8438a652d13)
 
@@ -247,9 +247,9 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 
 #### 但是tx_reset为高会限制GT的初始化，虽然产生了QPLL和outclk，但是GT还没初始化成功，只有QPLL成功lock，然后outclk成功输出一段时间后，才有初始化成功，也就是图中第二个金色信号
 
->总结 输入GT的复位可以一直为0，这样会让QPLL先复位一下再重新生成，生成之后才有outclk
->输入GT的复位可以先1后0，先1，outclk生成，并且快于QPLL，但是复位变0后，QPLL重新生成，outclk就消失了，直到QPLL成功生成后，才有，这回变成正常时序了。
->但是输入GT的复位不能一直为1，首先时序不对，其次不会初始化成功。
+>总结 1 输入GT的复位可以一直为0，这样会让初始化走下去；2 QPLL必须有一次复位，这样会让QPLL先复位一下再重新生成，生成之后才有outclk，这样正常时序
+>2 输入GT的复位可以先1后0，只要有1，初始化就可以进行；先1导致QPLL没有reset,outclk生成，并且快于QPLL，但是复位变0后，导致QPLL产生一次复位，QPLL重新生成，outclk就消失了，直到QPLL成功生成后，才有outclk，这回变成正常时序了。
+>但是输入GT的复位不能一直为1，首先不会产生QPLL复位，导致时序不对，其次不会初始化成功。
 
 >也就是必须现有QPLL，然后有outclk和useclk2，然后才有GT的工作状态。
 

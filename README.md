@@ -231,6 +231,8 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 
 ### 对于本项目中顶层文件中，GT_IP使用usrclk2产生的reset驱动复位的思考：
 
+![image](https://github.com/Vikkdsun/GT/assets/114153159/7dbec0ca-b6df-458a-9c60-80f1594a051a)
+
 一：usrclk2来自outclk，而outclk是IP产生的，包括其复位与否，LOCK与否，我们认为IP上电后会自己控制outclk产生、复位以及LOCK的释放，所以当复位释放，usrclk2随着outclk释放产生。
 
 二：由于上电默认reset高电平，所以GT初始化（我们理解是FSM初始化）不动，直到usrclk2产生，然后过了一定周期复位被释放，初始化完成，整个GT才进入工作状态。

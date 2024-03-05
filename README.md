@@ -242,20 +242,32 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/beba5777-469a-4b10-a4c3-e0a81edf6146)
 
 >总结
+>
 >1 QPLL先于userclk2生成，这是GT决定的
+>
 >2 QPLL如果在userclk2生成前没有复位，会导致userclk2出来的很快，这是错误时序，必须要复位QPLL一次
+>
 >3 QPLL复位后，userclk2要等QPLL释放复位后一段时间才出来
+>
 >4 tx_reset主要用来初始化GT，和上面的独立
 >
+>
 >本项目采用的初始化流程：
+>
 >1 tx_reset和QPLL的复位存在关系。由于tx_reset开始为高，导致QPLL复位一直拉低，QPLL一直都有，于是userclk2出来很快
+>
 >2 userclk2出来后，过一段时间tx_reset释放导致QPLL的reset出现，进而导致userclk2消失
+>
 >3 QPLL复位后再次产生QPLL时钟，之后userclk2再次出现，加上tx_reset为0，初始化正常运行
+>
 >
 >对于本项目的tx_reset和QPLL的复位存在关系，官方例程给的方式是tx_reset一直给0，这是最好的做法
 >
+>
 >更一般的方法：
+>
 >1 tx_reset和QPLL复位独立，前者在sysclk时钟域，后者在gtrefclk时钟域。上电tx_reset一直给高，同时给QPLL复位拉高一段时间后释放（该复位和GT IP输出的复位相或），QPLL时钟产生，过一段时间userclk2产生
+>
 >2 再过一段时间释放tx_reset，让初始化正常运行
 
 

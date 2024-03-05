@@ -282,7 +282,11 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/0418753b-b000-4613-88b4-3f6fe525d2c1)
 
+### GT COMMON
 
+这个模块输入系统时钟，以及tx_reset，输出一个复位信号。
+
+主要做了以下事情，输出一直0，在tx_reset为0后一段周期输出一个复位高脉冲，接下来一直0
 
 
 All reset ports described in this section initiate the internal reset state machine when driven High. The internal reset state machines are held in the reset state until these same reset ports are driven Low. These resets are all asynchronous. The guideline for the pulse width of these asynchronous resets is one period of the reference clock, unless otherwise noted.

@@ -272,6 +272,16 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 >
 >那么不会输出复位，如果后面变0，就会又输出一次，变1再变0就再输出一次。
 
+#### 所以实际使用时，可以把tx_reset一直为0，然后把GTip输出的QPLL复位连给QPLL common
+
+#### 也可以把本工程的tx_reset改为0，其他不变
+
+#### 或者创造一个QPLL common的输入复位，让tx_reset一直0，然后QPLL common的输入复位先1一阵子，再拉低，如下图。
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/523c98bd-2d9e-48c2-9214-628b6ece2a56)
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/0418753b-b000-4613-88b4-3f6fe525d2c1)
+
 
 
 

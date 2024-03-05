@@ -1,4 +1,4 @@
-# GT
+![image](https://github.com/Vikkdsun/GT/assets/114153159/75097ec4-05eb-4316-b745-4d92dcbfed2e)# GT
  A project of GT.
  
  ![image](https://github.com/Vikkdsun/GT/assets/114153159/428dac69-37c0-48cd-8ea5-ab8e61f222bd)
@@ -241,34 +241,37 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/beba5777-469a-4b10-a4c3-e0a81edf6146)
 
+![image](https://github.com/Vikkdsun/GT/assets/114153159/fd16154a-d6ce-4fd9-a748-8221e1bbc980)
+
+从上面这个图可以看到***GT IP输出的QPLL复位***是由GT IP输入的tx_reset决定的，tx_reset一直为0则只复位一次，如果又变1，内部应该有计数器之类的，又会在下次变0一段时间后输出一个复位。
+
 >总结
 >
->1 QPLL先于userclk2生成，这是GT决定的
+>一 userclk的生成条件：
+>1.如果tx_reset为0：
 >
->2 QPLL如果在userclk2生成前没有复位，会导致userclk2出来的很快，这是错误时序，必须要复位QPLL一次
+>    如果QPLL common没有复位过，哪怕有QPLL时钟，也不会存在userclk，如下图
 >
->3 QPLL复位后，userclk2要等QPLL释放复位后一段时间才出来
+![image](https://github.com/Vikkdsun/GT/assets/114153159/5a6d8516-7312-40ba-883f-03cd44269c52)
+
+>    如果QPLL common复位过，那么会在QPLL common输出的时钟lock时才由userclk输出
 >
->4 tx_reset主要用来初始化GT，和上面的独立
+> 2.如果tx_reset为1：
 >
+>     无论QPLL common输出的时钟存在与否，那么就会很快产生userclk，不管有没有lock，这是错误时序，如下图，common输入的复位我一直拉高，同时tx_reset一直为1，虽然QPLL时钟(gt0_qpll_outclk)没有，但是一直有userclk
 >
->本项目采用的初始化流程：
+![image](https://github.com/Vikkdsun/GT/assets/114153159/cdb94823-7675-47a1-aefe-c4d2a1c74695)
+
+>二 GT IP输出的QPLL复位产生条件
 >
->1 tx_reset和QPLL的复位存在关系。由于tx_reset开始为高，导致QPLL复位一直拉低，QPLL一直都有，于是userclk2出来很快
+>1.如果tx_reset为0：
 >
->2 userclk2出来后，过一段时间tx_reset释放导致QPLL的reset出现，进而导致userclk2消失
+>那么过一段时间就会输出且只输出一次复位
 >
->3 QPLL复位后再次产生QPLL时钟，之后userclk2再次出现，加上tx_reset为0，初始化正常运行
+>2.如果tx_reset为1：
 >
->
->对于本项目的tx_reset和QPLL的复位存在关系，官方例程给的方式是tx_reset一直给0，这是最好的做法
->
->
->更一般的方法：
->
->1 tx_reset和QPLL复位独立，前者在sysclk时钟域，后者在gtrefclk时钟域。上电tx_reset一直给高，同时给QPLL复位拉高一段时间后释放（该复位和GT IP输出的复位相或），QPLL时钟产生，过一段时间userclk2产生
->
->2 再过一段时间释放tx_reset，让初始化正常运行
+>那么不会输出复位，如果后面变0，就会又输出一次，变1再变0就再输出一次。
+
 
 
 

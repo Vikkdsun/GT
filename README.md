@@ -252,10 +252,10 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 >2 userclk2出来后，过一段时间tx_reset释放导致QPLL的reset出现，进而导致userclk2消失
 >3 QPLL复位后再次产生QPLL时钟，之后userclk2再次出现，加上tx_reset为0，初始化正常运行
 >
->对于本项目的tx_reset和QPLL的复位存在关系，官方例程给的方式是tx_reset一直给0，这也可以
+>对于本项目的tx_reset和QPLL的复位存在关系，官方例程给的方式是tx_reset一直给0，这是最好的做法
 >
 >更一般的方法：
->1 tx_reset和QPLL复位独立。上电tx_reset一直给高，同时给QPLL复位拉高一段时间后释放，QPLL时钟产生，过一段时间userclk2产生
+>1 tx_reset和QPLL复位独立，前者在sysclk时钟域，后者在gtrefclk时钟域。上电tx_reset一直给高，同时给QPLL复位拉高一段时间后释放（该复位和GT IP输出的复位相或），QPLL时钟产生，过一段时间userclk2产生
 >2 再过一段时间释放tx_reset，让初始化正常运行
 
 

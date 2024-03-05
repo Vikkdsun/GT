@@ -235,7 +235,11 @@ CDR产生的时钟会有累计误差，在发送数据时，发送特殊的一�
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/e9d289e8-ed20-4318-a008-eba6f8945e11)
 
+![image](https://github.com/Vikkdsun/GT/assets/114153159/fe0f2a15-130a-4ebb-b2d0-d10653a947e4)
+
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/0125115e-92a8-4e22-8529-c8438a652d13)
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/beba5777-469a-4b10-a4c3-e0a81edf6146)
 
 >总结
 >1 QPLL先于userclk2生成，这是GT决定的

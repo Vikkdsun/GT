@@ -1,4 +1,4 @@
-![image](https://github.com/Vikkdsun/GT/assets/114153159/75097ec4-05eb-4316-b745-4d92dcbfed2e)# GT
+# GT
  A project of GT.
  
  ![image](https://github.com/Vikkdsun/GT/assets/114153159/428dac69-37c0-48cd-8ea5-ab8e61f222bd)

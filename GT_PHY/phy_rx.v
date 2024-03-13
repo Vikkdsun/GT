@@ -15,6 +15,11 @@ module phy_rx(
     input [3:0]             i_gt_rx_charisk 
 );
 
+reg                     r_rst                           ;
+always@(posedge i_clk)
+begin
+    r_rst <= i_rst;
+end
 
 reg [31:0]              ri_gt_rx_data                   ;
 reg [3:0]               ri_gt_rx_charisk                ;
@@ -36,9 +41,9 @@ assign                  o_axi_m_valid = ro_axi_m_valid  ;
 assign                  o_axi_m_keep  = ro_axi_m_keep   ;
 assign                  o_axi_m_last  = ro_axi_m_last   ;
 
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst) begin
+    if (r_rst) begin
         ri_gt_rx_data       <= 'd0;
         ri_gt_rx_charisk    <= 'd0;
         ri_gt_rx_data_1d    <= 'd0;
@@ -52,9 +57,9 @@ begin
 end
 
 // sof use ri_data to find
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst) begin
+    if (r_rst) begin
         r_sof       <= 'd0;
         r_sof_local <= 'd0;
     end else if (ri_gt_rx_data[31:8] == 24'hfb50bc && ri_gt_rx_charisk[3:1] == 3'b101) begin
@@ -76,9 +81,9 @@ begin
 end
 
 // eof use i_data/ ri_data/ ri_data_1d all to find 
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst) begin
+    if (r_rst) begin
         r_eof       <= 'd0;
         r_eof_local <= 'd0;
     end else if (r_sof_local == 4'b1000 && i_gt_rx_data[7:0] == 8'hfd && i_gt_rx_charisk[0] == 1'b1) begin  // pre_eof
@@ -89,44 +94,20 @@ begin
         r_eof_local <= 4'b1000;
     end else if (r_sof_local == 4'b0001 && ri_gt_rx_data_1d[23:16] == 8'hfd && ri_gt_rx_charisk_1d[2:0] == 3'b100) begin  // post_eof
         r_eof       <= 'd1;
-        r_eof_local <= 4'b0010;
+        r_eof_local <= 4'b0100;
     end else if (r_sof_local == 4'b0001 && ri_gt_rx_data_1d[31:24] == 8'hfd && ri_gt_rx_charisk_1d == 4'b1000) begin // post_eof
         r_eof       <= 'd1;
-        r_eof_local <= 4'b0010;
-    end else if (r_sof_local == 4'b1000 && ri_gt_rx_data[15:8] == 8'hfd && ri_gt_rx_charisk[1:0] == 2'b10) begin
+        r_eof_local <= 4'b1000;
+    end else if (ri_gt_rx_data[15:8] == 8'hfd && ri_gt_rx_charisk[1:0] == 2'b10) begin
         r_eof       <= 'd1;
         r_eof_local <= 4'b0010;
-    end else if (r_sof_local == 4'b1000 && ri_gt_rx_data[23:16] == 8'hfd && ri_gt_rx_charisk[2:0] == 3'b100) begin
+    end else if (r_sof_local != 4'b0001 && ri_gt_rx_data[23:16] == 8'hfd && ri_gt_rx_charisk[2:0] == 3'b100) begin
         r_eof       <= 'd1;
         r_eof_local <= 4'b0100;
-    end else if (r_sof_local == 4'b1000 && ri_gt_rx_data[31:24] == 8'hfd && ri_gt_rx_charisk == 4'b1000) begin
+    end else if (r_sof_local > 4'b0010 && ri_gt_rx_data[31:24] == 8'hfd && ri_gt_rx_charisk == 4'b1000) begin
         r_eof       <= 'd1;
         r_eof_local <= 4'b1000;
-    end else if (r_sof_local == 4'b0010 && ri_gt_rx_data[23:16] == 8'hfd && ri_gt_rx_charisk[2:0] == 3'b100) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b0100;
-    end else if (r_sof_local == 4'b0010 && ri_gt_rx_data[15:8] == 8'hfd && ri_gt_rx_charisk[1:0] == 2'b10) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b0010;
-    end else if (r_sof_local == 4'b0010 && ri_gt_rx_data[7:0] == 8'hfd && ri_gt_rx_charisk[0] == 1'b1) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b0001;
-    end else if (r_sof_local == 4'b0001 && ri_gt_rx_data[15:8] == 8'hfd && ri_gt_rx_charisk[1:0] == 2'b10) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b0010;
-    end else if (r_sof_local == 4'b0001 && ri_gt_rx_data[7:0] == 8'hfd && ri_gt_rx_charisk[0] == 1'b1) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b0001;
-    end else if (r_sof_local == 4'b0100 && ri_gt_rx_data[31:24] == 8'hfd && ri_gt_rx_charisk == 4'b1000) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b1000;
-    end else if (r_sof_local == 4'b0100 && ri_gt_rx_data[23:16] == 8'hfd && ri_gt_rx_charisk[2:0] == 3'b100) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b0100;
-    end else if (r_sof_local == 4'b0100 && ri_gt_rx_data[15:8] == 8'hfd && ri_gt_rx_charisk[1:0] == 2'b10) begin
-        r_eof       <= 'd1;
-        r_eof_local <= 4'b0010;
-    end else if (r_sof_local == 4'b0100 && ri_gt_rx_data[7:0] == 8'hfd && ri_gt_rx_charisk[0] == 1'b1) begin
+    end else if (r_sof_local != 4'b1000 && ri_gt_rx_data[7:0] == 8'hfd && ri_gt_rx_charisk[0] == 1'b1) begin
         r_eof       <= 'd1;
         r_eof_local <= 4'b0001;
     end else begin
@@ -135,9 +116,9 @@ begin
     end
 end
 
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst)
+    if (r_rst)
         r_pre_valid <= 'd0;
     else if (r_eof)
         r_pre_valid <= 'd0;
@@ -147,9 +128,9 @@ begin
         r_pre_valid <= r_pre_valid;
 end
 
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst)
+    if (r_rst)
         r_pre_data <= 'd0;
     else if ((r_sof || r_pre_valid) && r_sof_local == 4'b1000)
         r_pre_data <= {ri_gt_rx_data[7:0], ri_gt_rx_data[15:8], ri_gt_rx_data[23:16], ri_gt_rx_data[31:24]};
@@ -163,9 +144,9 @@ begin
         r_pre_data <= 'd0;
 end
 
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst)
+    if (r_rst)
         ro_axi_m_keep <= 'd0;
     else if (r_eof && r_eof_local ==4'b0001)
         case(r_sof_local)
@@ -205,9 +186,9 @@ begin
         ro_axi_m_keep <= 4'b0000;
 end
 
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst)
+    if (r_rst)
         ro_axi_m_last <= 'd0;
     else if (r_eof)
         ro_axi_m_last <= 'd1;
@@ -215,9 +196,9 @@ begin
         ro_axi_m_last <= 'd0;
 end
 
-always@(posedge i_clk or posedge i_rst)
+always@(posedge i_clk or posedge r_rst)
 begin
-    if (i_rst) begin
+    if (r_rst) begin
         ro_axi_m_data  <= 'd0;
         ro_axi_m_valid <= 'd0;
     end else begin

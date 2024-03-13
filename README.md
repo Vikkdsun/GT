@@ -3,6 +3,9 @@
  
  ![image](https://github.com/Vikkdsun/GT/assets/114153159/428dac69-37c0-48cd-8ea5-ab8e61f222bd)
 
+
+ 更新log： 在综合布局布线时发现时序不收敛，于是更新了最新的代码，主要是对tx_done信号打了一拍，减少else if ，增加case，打拍i_rst ----2024/3/13 11:37
+
 # GT收发器
 ---
 ## 简介

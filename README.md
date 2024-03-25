@@ -80,6 +80,13 @@ RXUSRCLK2：写代码时 always就用这个时钟驱动
 
 ***尽管TXUSRCLK、TXUSRCLK2和发射机参考时钟可能以不同的频率运行，但它们的源必须是一个振荡器。因此，TXUSRCLK和TXUSRCLK 2必须是发射机参考时钟的倍频或分频版本。***
 
+![image](https://github.com/Vikkdsun/GT/assets/114153159/2b498e8f-be60-40d5-bd6f-4bcccead5559)
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/138f566e-0f70-4162-a01c-e705c9b6af80)
+
+![image](https://github.com/Vikkdsun/GT/assets/114153159/32307c2a-050f-4645-b92a-9160695ef471)
+
+
 GT Bank有两对参考时钟（差分），但是我们只能用其一。这个时钟进来后，首先经过IBUFDS_GTE2（差分转单端、单端转差分），之后两条路，一个交给QPLL，另一个交给各自的通道，交给通道的CPLL。
 
 图中可以看到，QPLL和CPLL是可以选择使用哪个的，那么选择哪个？

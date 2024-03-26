@@ -86,6 +86,7 @@ RXUSRCLK2：写代码时 always就用这个时钟驱动
 
 ![image](https://github.com/Vikkdsun/GT/assets/114153159/32307c2a-050f-4645-b92a-9160695ef471)
 
+**比如选择外部位宽32，内部位宽40（40意味着是32做8b10b），所以可以认为内外都是4byte，相等，所以userclk=usrclk2，但是如果选择外部63，内部40，那么外部8byte，内部4byte，所以usrclk2=usrclk/2**
 
 GT Bank有两对参考时钟（差分），但是我们只能用其一。这个时钟进来后，首先经过IBUFDS_GTE2（差分转单端、单端转差分），之后两条路，一个交给QPLL，另一个交给各自的通道，交给通道的CPLL。
 
